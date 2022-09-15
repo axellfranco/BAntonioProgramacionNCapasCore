@@ -1,0 +1,265 @@
+﻿@model ML.Usuario
+@{
+    ViewData["Title"] = "Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Usuario</h1>
+<h5>Seleccione el boton de + para añadir un nuevo Usuario</h5>
+
+<hr />
+
+
+<div class="row">
+    <div class="col-md-12 col-sm-3">
+        @Html.ActionLink("+", "Form", "Usuario", htmlAttributes: new { @class = "btn btn-success" })
+    </div>
+</div>
+
+@*BUSQUEDA ABIERTA*@
+
+<div class="row">
+    @using (Html.BeginForm("GetAll", "Usuario", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="form-horizontal">
+
+            <div class="form-group">
+                <div class="bi bi-person col-md-3">
+
+                    @Html.LabelFor(model => model.Nombre)
+
+                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
+
+                </div>
+
+                <div class="bi bi-person col-md-3">
+
+                    @Html.LabelFor(model => model.ApellidoPaterno)
+
+                    @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control" })
+                </div>
+
+                <div class="bi bi-person col-md-3">
+                    @Html.LabelFor(model => model.ApellidoMaterno)
+                    @Html.TextBoxFor(model => model.ApellidoMaterno, new { @class = "form-control" })
+                </div>
+
+                <div class="col-md-3">
+                <input type="submit" value="Buscar" class="btn btn-success" />
+                </div>
+
+            </div>
+
+            
+        </div>
+    }
+</div>
+@*BUSQUEDA ABIERTA*@
+
+<div class="row" style="padding-top:30px">
+    <div class="col-lg-12">
+        <table class="table table-responsive">
+            <thead class="thead-dark">
+                <tr>
+                    <th class="text-center" scope="col">
+                        Editar
+                    </th>
+                    <th class="d-none" scope="col">
+                        IdUsuario
+                    </th>
+                    <th class="text-center" scope="col">
+                        UserName
+                    </th>
+                    <th class="text-center" scope="col">
+                        Nombre Completo
+                    </th>
+                    <th class="d-none" scope="col">
+                        Apellido Paterno
+                    </th>
+                    <th class="d-none" scope="col">
+                        Apellido Materno
+                    </th>
+                    <th class="text-center" scope="col">
+                        Email
+                    </th>
+                    <th class="d-none" scope="col">
+                        Password
+                    </th>
+                    <th class="text-center" scope="col">
+                        Fecha de Nacimiento
+                    </th>
+                    <th class="text-center" scope="col">
+                        Sexo
+                    </th>
+                    <th class="text-center" scope="col">
+                        Telefono
+                    </th>
+                    <th class="text-center" scope="col">
+                        Celular
+                    </th>
+                    <th class="text-center" scope="col">
+                        CURP
+                    </th>
+                    <th class="text-center" scope="col">
+                        Imagen
+                    </th>
+                    <th class="d-none" scope="col">
+                        IdRol
+                    </th>
+
+                    <th class="text-center" scope="col">
+                        Rol
+                    </th>
+
+                    <th class="text-center" scope="col">
+                        Direccion
+                    </th>
+                    <th class="d-none" scope="col">
+                        Numero Interior
+                    </th>
+                    <th class="d-none" scope="col">
+                        Numero Exterior
+                    </th>
+                    <th class="text-center" scope="col">
+                        Colonia
+                    </th>
+                    <th class="text-center" scope="col">
+                        Codigo Postal
+                    </th>
+                    <th class="text-center" scope="col">
+                        Municipio
+                    </th>
+                    <th class="text-center" scope="col">
+                        Estado
+                    </th>
+                    <th class="text-center" scope="col">
+                        Pais
+                    </th>
+
+                    <th class="text-center" scope="col">
+                        Eliminar
+                    </th>
+
+                </tr>
+            </thead>
+
+
+            @foreach (ML.Usuario usuario in Model.UsuarioList)
+            {
+                <tr>
+                    <td class="text-center">
+                        <a class="btn btn-warning bi bi-pencil-square" href="@Url.Action("Form", "Usuario", new { IdUsuario =usuario.IdUsuario })"></a>
+                    </td>
+                    <td class="d-none">
+                        @usuario.IdUsuario
+                    </td>
+                    <td class="text-center">
+                        @usuario.UserName
+                    </td>
+                    <td class="text-center">
+                        @usuario.Nombre  @usuario.ApellidoPaterno @usuario.ApellidoMaterno
+                    </td>
+                    <td class="d-none">
+                        @usuario.ApellidoPaterno
+                    </td>
+                    <td class="d-none">
+                        @usuario.ApellidoMaterno
+                    </td>
+                    <td class="text-center">
+                        @usuario.Email
+                    </td>
+
+                    <td class="d-none">
+                        @usuario.Password
+                    </td>
+                    <td class="text-center">
+
+                        @Convert.ToDateTime(usuario.FechaNacimiento).ToString("dd-mm-yyyy")
+                    </td>
+                    <td class="text-center">
+                        @usuario.Sexo
+                    </td>
+                    <td class="text-center">
+                        @usuario.Telefono
+                    </td>
+                    <td class="text-center">
+                        @usuario.Celuar
+                    </td>
+                    <td class="text-center">
+                        @usuario.Curp
+                    </td>
+                    <td class="text-center">
+                        @if (usuario.Imagen == null)
+                            {
+                             <img src="~/Imagenes/SinUsuario.png" style="width:80px; height:40px" />
+                            }
+                            else
+                            {
+                             <img src="data:image/*;base64,@usuario.Imagen" style="width:75px; height:35px" />
+                            }
+                    </td>
+                    <td class="d-none">
+                        @usuario.Rol.IdRol
+                    </td>
+
+                    <td class="text-center">
+                        @usuario.Rol.Nombre
+                    </td>
+
+                    <td class="d-none">
+                        @usuario.Direccion.IdDireccion
+
+                    </td>
+
+                    <td class="text-center">
+                        @usuario.Direccion.Calle,@usuario.Direccion.NumeroInterior, @usuario.Direccion.NumeroExterior
+                    </td>
+                    <td class="d-none">
+                        @usuario.Direccion.NumeroInterior
+                    </td>
+                    <td class="d-none">
+                        @usuario.Direccion.NumeroExterior
+                    </td>
+
+                    <td class="d-none">
+                        @usuario.Direccion.Colonia.IdColonia
+                    </td>
+                    <td class="text-center">
+                        @usuario.Direccion.Colonia.Nombre
+                    </td>
+                    <td class="text-center">
+                        @usuario.Direccion.Colonia.CodigoPostal
+                    </td>
+                    <td class="text-center">
+                        @usuario.Direccion.Colonia.Municipio.Nombre
+                    </td>
+
+                    <td class="d-none">
+                        @usuario.Direccion.Colonia.Municipio.Estado.IdEstado
+                    </td>
+                    <td class="text-center">
+                        @usuario.Direccion.Colonia.Municipio.Estado.Nombre
+                    </td>
+
+
+                    <td class="d-none">
+                        @usuario.Direccion.Colonia.Municipio.Estado.Pais.IdPais
+                    </td>
+                    <td class="text-center">
+                        @usuario.Direccion.Colonia.Municipio.Estado.Pais.Nombre
+                    </td>
+
+                    <th class="text-center">
+                        <a class="btn btn-danger bi bi-x-square-fill" href="@Url.Action("Delete", "Usuario", new { IdUsuario =usuario.IdUsuario })" onclick="return confirm('¿Estas seguro que deseas eliminar este registro?');"></a>
+                    </th>
+
+
+                </tr>
+
+            }
+        </table>
+    </div>
+</div>
+
+
+    

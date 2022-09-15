@@ -1,0 +1,31 @@
+//Propiedades de los campos del INNER JOIN
+        public string? NombreRol { get; set; } //ROL
+
+
+        //Direccion
+       public int IdDireccion { get; set; }
+        public string DireccionCalle { get; set; }
+
+        public string NumeroInterior { get; set; }
+
+        public string NumeroExterior { get; set; }
+
+        
+        //Colonia
+        public int IdColonia { get; set; }
+        public string? NombreColonia { get; set; }
+
+        public string? CodigoPostal { get; set; }
+
+        //Municipio
+        public int IdMunicipio { get; set; }
+
+        public string? MunicipioNombre { get; set; }
+
+        //Estado
+        public int IdEstado { get; set; }
+        public string? EstadoNombre { get; set; }
+
+        //Pais
+        public int IdPais { get; set; }
+        public string? PaisNombre { get; set; }

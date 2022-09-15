@@ -1,0 +1,110 @@
+﻿@model ML.Producto
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Producto</h1>
+<h5>Seleccione el boton de + para añadir un nuevo Producto</h5>
+
+<div class="row">
+    <div class="col-md-12 col-sm-3">
+        @Html.ActionLink("+", "Form", "Producto", htmlAttributes: new { @class = "btn btn-success" })
+    </div>
+</div>
+
+<div class="row" style="padding-top:30px">
+    <div class="col-lg-12">
+        <table class="table table-responsive">
+            <thead class="thead-dark">
+                <tr>
+                    <th class="text-center" scope="col">
+                        Editar
+                    </th>
+                    <th class="d-none" scope="col">
+                        IdProducto
+                    </th>
+                    <th class="text-center" scope="col">
+                        Nombre
+                    </th>
+                    <th class="text-center" scope="col">
+                        Precio Unitario
+                    </th>
+                    <th class="d-none" scope="col">
+                        Stock
+                    </th>
+                    <th class="d-none" scope="col">
+                        IdProveedor
+                    </th>
+                    <th class="text-center" scope="col">
+                        IdDepartamento
+                    </th>
+                    <th class="d-none" scope="col">
+                        Descripcion
+                    </th>
+                    <th class="text-center" scope="col">
+                        Imagen
+                    </th>
+                    
+
+                    <th class="text-center" scope="col">
+                        Eliminar
+                    </th>
+
+                </tr>
+            </thead>
+
+
+            @foreach (ML.Producto producto in Model.ProductoList)
+            {
+                <tr>
+                    <td class="text-center">
+                        <a class="btn btn-warning bi bi-pencil-square" href="@Url.Action("Form", "Producto", new { IdProducto =producto.IdProducto})"></a>
+
+                    </td>
+                    <td class="d-none">
+                        @producto.IdProducto
+                    </td>
+                    <td class="text-center">
+                        @producto.Nombre
+                    </td>
+                    <td class="text-center">
+                        @producto.PrecioUnitario
+                    </td>
+                    <td class="d-none">
+                        @producto.Stock
+                    </td>
+                    <td class="d-none">
+                        @producto.IdProveedor
+                    </td>
+                    <td class="text-center">
+                        @producto.IdDepartamento
+                    </td>
+
+                    <td class="d-none">
+                        @producto.Descripcion
+                    </td>
+                    
+                    <td class="text-center">
+                        @if (producto.Imagen == null)
+                            {
+                             <img src="~/Imagenes/SinUsuario.png" style="width:80px; height:40px" />
+                            }
+                            else
+                            {
+                             <img src="data:image/*;base64,@producto.Imagen" style="width:75px; height:35px" />
+                            }
+                    </td>
+                   
+
+                    <th class="text-center">
+                        <a class="btn btn-danger bi bi-x-square-fill" href="@Url.Action("Delete", "Producto", new { IdProducto =producto.IdProducto })" onclick="return confirm('¿Estas seguro que deseas eliminar este registro?');"></a>
+                    </th>
+
+
+                </tr>
+
+            }
+        </table>
+    </div>
+</div>
