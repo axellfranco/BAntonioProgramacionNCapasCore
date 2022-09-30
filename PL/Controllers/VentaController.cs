@@ -52,5 +52,12 @@ namespace PL.Controllers
                 return View(producto);
             }
         }
+
+        public JsonResult GetDepartamento(int IdArea)
+        {
+            var result = BL.Departamento.DepartamentoGetByArea(IdArea);
+            return Json(result.Objects);
+        }
+
     }
 }
