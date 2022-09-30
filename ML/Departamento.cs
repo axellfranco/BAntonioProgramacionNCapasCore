@@ -13,5 +13,7 @@ namespace ML
         public byte IdArea { get; set; }
 
         public ML.Area? Area { get; set; }
+
+        public List<object>? Departamentos { get; set; }
     }
 }

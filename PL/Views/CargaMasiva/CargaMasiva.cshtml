@@ -1,0 +1,56 @@
+﻿
+@model ML.Result
+@{
+    ViewData["Title"] = "CargaMasiva";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Carga Masiva de Usuario</h1>
+<h5>Seleccione con que tipo de archivo desea hacer la carga</h5>
+
+
+<div class="row">
+        <div class="col-md-6">
+            <a><input type="submit" value="Excel" class="btn btn-success col-md-12" id="xlsx" /></a>
+        </div>
+        <div class="col-md-6">
+            <a><input type="submit" value="TXT" class="btn btn-primary col-md-12" id="txt" /></a>
+        </div>
+    </div>
+@using (Html.BeginForm("CargaMasiva", "CargaMasiva", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="row g-3" id="fuImage" style="display:none;">
+        <div class="col-md-6">
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon"><i class="bi bi-file-earmark-text-fill" style="color: lightseagreen"></i></span>
+                <input type='file' class="form-control" name="FileExcel" />
+            </div>
+        </div>
+
+        
+
+        <div class="row g-3">
+            <div class="col-md-1">
+                <a><input type="submit" value="Procesar" class="btn btn-success" /></a>
+                <br />
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+
+@section Scripts
+    {
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script type="text/javascript">
+
+
+        $('#xlsx').click(function () {
+            $('#fuImage').toggle('slow', function () {
+            });
+        });
+    </script>
+}

@@ -13,5 +13,7 @@ namespace ML
         public string? Nombre { get; set; }
 
         public string? Telefono { get; set; }
+
+        public List<object>? Proveedores { get; set; }
     }
 }

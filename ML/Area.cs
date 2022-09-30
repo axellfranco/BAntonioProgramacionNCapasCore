@@ -8,8 +8,10 @@ namespace ML
 {
     public class Area
     {
-        public byte IdArea { get; set; }
+        public int IdArea { get; set; }
 
         public string? Nombre { get; set; }
+
+        public List<object>? AreaList { get; set; }
     }
 }

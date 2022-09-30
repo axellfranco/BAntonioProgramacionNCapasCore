@@ -16,5 +16,14 @@ namespace DL
 
         public virtual Departamento? IdDepartamentoNavigation { get; set; }
         public virtual Proveedor? IdProveedorNavigation { get; set; }
+
+        //Proveedor
+        public string? NombreProveedor { get; set; }
+
+
+        //Departamento
+
+        public string? NombreDepartamento { get; set; }
+
     }
 }

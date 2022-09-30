@@ -1,0 +1,6 @@
+UserName|Nombre|ApellidoPaterno|ApellidoMaterno|Email|Password|FechaNacimiento|Sexo|Telefono|Celular|CURP|IdRol|Estatus|Calle|NumeroInterior|NumeroExterior|IdColonia
+MaximMax|Maximiliano|Hernandez|Cortez|Maxihernan01@gmail.com|seguridad123|1997-10-2|M|58103647|5612755201|MACJ740425HMCCRS07|2|1|Vicente Suarez|S/N|23|1
+AbarcaQueen|Reina|Abarca|Morales|queenabarca@gmail.com|$hola$123|30-04-1978|F|68974103|55147941547|AAMR780430MGRBRN00|1|1|Av. de Sol|S/N|33|2
+AgueroD|Melchor Zeferino|Aguero|Degante|Aguerozeferino@hotmail.com|$pass@123|26-08-1944|M|58471047|556974065147|AUDM440826HMSGGL04|1|1|Calle Juan de la Barrera|S/N|7|3
+AlarconBerth|Bertha Florina|Alarcon|Pacheco|berthaalarcon@live.com|$seguridad$|01-05-1949|F|59641067|569870301459|AAPB490501MMSLCR01|2|1|Av. Guadalupe|8|1|1
+AnayaMa|Maria Carmen|Anaya|Contraras|anamaco@outlook.com|pass$01@|09-02-1941|F|58400647|7264789541|AACC410209MMNNNR07|1|1|Camino a Tecla|S/N|S/N|1

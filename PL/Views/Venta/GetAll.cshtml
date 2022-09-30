@@ -1,0 +1,121 @@
+﻿@model ML.Producto
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Venta</h1>
+
+
+       @using (Html.BeginForm("GetAll", "Venta", FormMethod.Post, new { enctype = "multipart/form-data" }))
+       {
+        <div class="row">
+        <div class="col-md-3">
+
+            @Html.LabelFor(model => model.Nombre)
+
+            @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
+          </div>
+
+
+         <div class="col-md-3">
+            @Html.LabelFor(model => model.Departamento.Area, new { @class = "control-label" })
+
+              <div class="input-group mb-3">
+
+                <span class="input-group-text"><i class="bi bi-house-fill"></i></span>
+
+                @if (Model.Departamento.Area.AreaList == null)
+                {
+                    @Html.DropDownListFor(model => model.Departamento.Area.IdArea, new SelectList(string.Empty, "Value", "Text"), "Seleccione una Area", htmlAttributes: new { id = "ddlArea", @class = "form-control" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.Departamento.Area.IdArea , new SelectList(Model.Departamento.Area.AreaList , "IdArea", "Nombre"), "Seleccione una Area", htmlAttributes: new { id = "ddlArea", @class = "form-control" })
+                }
+                 </div>
+           </div>
+
+
+          <div class="col-md-3">
+
+            @Html.LabelFor(model => model.Departamento.Departamentos,new { @class = "control-label" })
+
+               <div class="input-group mb-3">
+
+                 <span class="input-group-text"><i class="bi bi-house-fill"></i></span>
+
+                @if (Model.Departamento.Departamentos == null)
+                {
+                    @Html.DropDownListFor(model => model.Departamento.IdDepartamento, new SelectList(string.Empty, "Value", "Text"), "Seleccione un Departamento", htmlAttributes: new { id = "ddlDepartamento", @class = "form-control" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.Departamento.IdDepartamento , new SelectList(Model.Departamento.Departamentos , "IdDepartamento", "Nombre"), "Seleccione un Departamento", htmlAttributes: new { id = "ddlDepartamento", @class = "form-control" })
+                }
+             </div>
+         </div>
+
+         <div class="col-md-3">
+                <input type="submit" value="Buscar" class="btn btn-success" />
+                </div>
+    </div>
+            }
+
+
+
+
+
+
+
+
+
+<div class="row">
+    @foreach (ML.Producto producto in Model.ProductoList)
+    {
+                                                <div class="card col-md-3" style="width: 18rem;">
+                                                    <div class="col-md-4">
+                                                        <img src=@producto.Imagen class="img-fluid rounded-start" alt="...">
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">@producto.Nombre</h5>
+                                                            <p class="card-text">@producto.Descripcion</p>
+                                                            <a href="#" class="btn btn-primary">Venta</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+    }
+</div>
+
+
+@section Scripts
+{
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+
+<script type="text/javascript">
+        $(document).ready(function () {
+        $("#ddlArea").change(function () {
+            $("#ddlDepartamento").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetDepartamento")', /*Configurando*/
+                dataType: 'json',
+                data: { IdArea: $("#ddlArea").val() },
+                success: function (departamentos) {
+                    $("#ddlDepartamento").append('<option value="0">'+ 'Seleccione un Departamento' + '</option>');
+                    $.each(departamentos, function (i, departamentos) {
+                        $("#ddlDepartamento").append('<option value="'
+                                                   + departamentos.IdDepartamento + '">'
+                                                   + departamentos.nombre + '</option>');
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed.' + ex);
+                }
+            });
+        });
+    });
+</script>
+}

@@ -45,8 +45,6 @@ namespace PL.Controllers
 
 
 
-
-
         [HttpGet]
         public ActionResult Form(int? IdUsuario)
 
@@ -56,20 +54,16 @@ namespace PL.Controllers
 
             ML.Result Roles = BL.Rol.GetAllEF(); //Lista de roles 
             ML.Result Paises = BL.Pais.GetAllEF();// Lista Pais
-            
-            usuario.Rol = new ML.Rol();
 
-           
+            usuario.Rol = new ML.Rol();
 
             usuario.Direccion = new ML.Direccion();
             usuario.Direccion.Colonia = new ML.Colonia();
             usuario.Direccion.Colonia.Municipio = new ML.Municipio();
             usuario.Direccion.Colonia.Municipio.Estado = new ML.Estado();
-            usuario.Direccion.Colonia.Municipio.Estado.Pais = new ML.Pais(); 
+            usuario.Direccion.Colonia.Municipio.Estado.Pais = new ML.Pais();
 
-            
-
-            if (IdUsuario == null) 
+            if (IdUsuario == null)
 
             {
 
@@ -84,18 +78,18 @@ namespace PL.Controllers
 
                 ML.Result result = BL.Usuario.GetById(IdUsuario.Value); //PASAR EL VALOR DE IdUsuario
 
-                 //Roles = BL.Rol.GetbyId(usuario.Rol.IdRol);
+                //Roles = BL.Rol.GetbyId(usuario.Rol.IdRol);
 
                 if (result.Correct)
                 {
-                    
+
                     usuario = ((ML.Usuario)result.Object);//unboxing 
 
-                    
+
                     ML.Result resultEstado = BL.Estado.EstadoGetByIdPais(usuario.Direccion.Colonia.Municipio.Estado.Pais.IdPais);
                     ML.Result resultMunicipio = BL.Municipio.MunicipioGetByIdEstado(usuario.Direccion.Colonia.Municipio.Estado.IdEstado);
                     ML.Result resultColonias = BL.Colonia.ColoniaGetByIdMunicipio(usuario.Direccion.Colonia.Municipio.IdMunicipio);
-                  
+
 
                     usuario.Rol.RolList = Roles.Objects;
                     usuario.Direccion.Colonia.Colonias = resultColonias.Objects;
@@ -109,9 +103,9 @@ namespace PL.Controllers
                 {
                     ViewBag.Mensaje = "Ocurrio un error " + result.ErrorMessage;
                 }
-                return View(usuario);
 
             }
+            return PartialView("Modal");
         }
 
 
@@ -128,34 +122,39 @@ namespace PL.Controllers
         {
             ML.Result result = new ML.Result();
             IFormFile image = Request.Form.Files["IFImage"];
+            if (ModelState.IsValid)
+            {
 
-            if (image != null)
-            {
-                //llamar al metodo que convierte a bytes la imagen
-                byte[] ImagenBytes = ConvertToBytes(image);
-                //convierto a base 64 la imagen y la guardo en mi objeto materia
-                usuario.Imagen = Convert.ToBase64String(ImagenBytes);
-            }
+                if (image != null)
+                {
+                    //llamar al metodo que convierte a bytes la imagen
+                    byte[] ImagenBytes = ConvertToBytes(image);
+                    //convierto a base 64 la imagen y la guardo en mi objeto materia
+                    usuario.Imagen = Convert.ToBase64String(ImagenBytes);
+                }
 
-            if (usuario.IdUsuario == null)
-            {
-                
-                result = BL.Usuario.Add(usuario);
+                if (usuario.IdUsuario == null)
+                {
+
+                    result = BL.Usuario.Add(usuario);
+                }
+                else
+                {
+                    result = BL.Usuario.Update(usuario);
+
+                }
             }
-            else
-            {
-                result = BL.Usuario.Update(usuario);
-                
-            }
+            //falta else
             return View("Modal");
         }
-        
 
-        public JsonResult GetEstado(int IdPais) //ENTRA
+
+        public JsonResult GetEstado(int IdPais)
         {
             var result = BL.Estado.EstadoGetByIdPais(IdPais);
             return Json(result.Objects);
         }
+
         public JsonResult GetMunicipio(int IdEstado)
         {
             var result = BL.Municipio.MunicipioGetByIdEstado(IdEstado);
@@ -169,9 +168,6 @@ namespace PL.Controllers
 
 
         //Input Imagen
-        
-
-
         public static byte[] ConvertToBytes(IFormFile imagen)
         {
 
@@ -181,6 +177,30 @@ namespace PL.Controllers
             fileStream.Read(bytes, 0, (int)fileStream.Length);
 
             return bytes;
+        }
+
+        //Estatus Toggle
+
+        public ActionResult Estatus(int? IdUsuario)
+        {
+
+            ML.Result result = BL.Usuario.GetById(IdUsuario.Value);
+
+            if (result.Correct)
+            {
+                ML.Usuario usuario = new ML.Usuario();
+
+                usuario = ((ML.Usuario)result.Object);
+                usuario.Estatus = (usuario.Estatus) ? false : true;
+
+                result = BL.Usuario.Update(usuario);
+            }
+            else
+            {
+
+            }
+
+            return PartialView("Modal");
         }
     }
 }

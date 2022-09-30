@@ -108,97 +108,153 @@ namespace BL
             return result;
         }
 
-        //public static ML.Result GetAllEF()
-        //{
-        //    ML.Result result = new ML.Result();
-        //    ML.Departamento departamento = new ML.Departamento();
-        //    try
+        public static ML.Result GetAll()
+        {
+            ML.Result result = new ML.Result();
 
-        //    {
-        //        using (DL.BantonioProgramacionNcapasContext context = new DL.BantonioProgramacionNcapasContext())
-        //        {
-        //            var query = context.Usuarios.FromSqlRaw($"DepartamentoGetAll {departamento.IdDepartamento},'{departamento.Nombre}',{departamento.Area.IdArea}").ToList();
+            try
 
+            {
+                using (DL.BantonioProgramacionNcapasContext context = new DL.BantonioProgramacionNcapasContext())
+                {
                     
-        //            result.Objects = new List<object>();
-        //            if (query != null)
-        //            {
-        //                foreach (var obj in query)
-        //                {
+                    var query = context.Departamentos.FromSqlRaw($"DepartamentoGetAll").ToList();
 
-        //                    departamento = new ML.Departamento();
+                    result.Objects = new List<object>();
+
+                    if (query != null)
+                    {
+                        foreach (var obj in query)
+                        {
+
+                            ML.Departamento departamento = new ML.Departamento();
+
+                            departamento.IdDepartamento= ((byte)obj.IdDepartamento);
+                            departamento.Nombre = obj.Nombre;
+                            
+                            
+                            result.Objects.Add(departamento);
+                        }
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "No se encontraron registros";
+                    }
+                }
+
+            }
+            catch (Exception Ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = Ex.Message;
+
+            }
+
+            return result;
+        }
+
+        public static ML.Result GetbyId(int IdDepartamento)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+
+            {
+                using (DL.BantonioProgramacionNcapasContext context = new DL.BantonioProgramacionNcapasContext())
+                {
+                    var query = context.Departamentos.FromSqlRaw($"DepartamentoGetByIdArea {IdDepartamento}").ToList();
+
+                    if (query != null)
+                    {
+                        result.Objects = new List<object>();
+                        foreach (var obj in query)
+                        {
+                            ML.Departamento departamento = new ML.Departamento();
+
+                            departamento.IdDepartamento = (byte)obj.IdDepartamento;
+                            departamento.Nombre = obj.Nombre;
+
+                            departamento.Area = new ML.Area();
+                            departamento.Area.IdArea = (byte)obj.IdArea;
 
 
-        //                    departamento.IdDepartamento = obj;
-        //                    departamento.Nombre = obj.Nombre;
+
+                            result.Objects.Add(departamento);
+
+                            result.Correct = true;
+
+                        }
+
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "No se encontraron registros";
+                    }
+                }
+
+            }
+            catch (Exception Ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = Ex.Message;
+
+            }
+
+            return result;
+        }
+
+        public static ML.Result DepartamentoGetByArea(int IdDepartamento)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+
+            {
+                using (DL.BantonioProgramacionNcapasContext context = new DL.BantonioProgramacionNcapasContext())
+                {
+                    
+                    var query = context.Departamentos.FromSqlRaw($"DepartamentoGetByIdArea {IdDepartamento}").ToList();
+
+                    if (query != null)
+                    {
+                        result.Objects = new List<object>();
+                        foreach (var obj in query)
+                        {
+                            ML.Departamento departamento = new ML.Departamento();
+
+                            departamento.IdDepartamento = ((byte)obj.IdDepartamento);
+                            departamento.Nombre = obj.Nombre;
+
+                            departamento.Area = new ML.Area();
+                            departamento.Area.IdArea =((byte)obj.IdArea);
+
+                            result.Objects.Add(departamento);
 
 
-        //                    departamento.Area = new ML.Area();
-        //                    departamento.Area.IdArea = (byte)obj.IdArea;
 
-        //                    result.Objects.Add(departamento);
-        //                }
-        //                result.Correct = true;
-        //            }
-        //            else
-        //            {
-        //                result.Correct = false;
-        //            }
-        //        }
+                        }
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "No se encontraron registros";
+                    }
+                }
 
-        //    }
-        //    catch (Exception Ex)
-        //    {
-        //        result.Ex = Ex;
-        //        throw;
-        //    }
+            }
+            catch (Exception Ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = Ex.Message;
 
-        //    return result;
-        //}
+            }
 
-        //public static ML.Result GetByIdEF(ML.Departamento departamento)
-        //{
-        //    ML.Result result = new ML.Result();
-
-        //    try
-        //    {
-        //        using (DL.BantonioProgramacionNcapasContext context = new DL.BantonioProgramacionNcapasContext())
-        //        {
-
-        //            var query = context.Usuarios.FromSqlRaw($"DepartamentoGetById {departamento.IdDepartamento}").AsEnumerable().FirstOrDefault();
-
-
-        //            result.Objects = new List<object>();
-
-        //            if (query != null)
-        //            {
-        //                ML.Departamento departamentos = new ML.Departamento();
-
-        //                departamentos.IdDepartamento = ((byte)query.IdDepartamento);
-        //                departamentos.Nombre = query.Nombre;
-
-        //                departamentos.Area = new ML.Area();
-        //                departamentos.Area.IdArea = (byte)query.IdArea;
-
-        //                result.Object = departamentos;
-
-        //                result.Correct = true;
-        //            }
-        //            else
-        //            {
-        //                result.Correct = false;
-        //            }
-
-        //        }
-
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-
-        //    return result;
-        //}
+            return result;
+        }
 
     }
 

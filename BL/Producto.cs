@@ -16,7 +16,7 @@ namespace BL
             {
                 using (DL.BantonioProgramacionNcapasContext context = new DL.BantonioProgramacionNcapasContext())
                 {
-                    var query = context.Database.ExecuteSqlRaw($"ProductoAdd '{producto.Nombre}',{producto.PrecioUnitario}, {producto.Stock}, {producto.IdProveedor}, '{producto.IdDepartamento}','{producto.Descripcion}'");
+                    var query = context.Database.ExecuteSqlRaw($"ProductoAdd '{producto.Nombre}',{producto.PrecioUnitario}, {producto.Stock}, {producto.Proveedor.IdProveedor}, '{producto.Departamento.IdDepartamento}','{producto.Descripcion}','{producto.Imagen}'");
 
                     if (query > 0)
                     {
@@ -46,7 +46,7 @@ namespace BL
             {
                 using (DL.BantonioProgramacionNcapasContext context = new DL.BantonioProgramacionNcapasContext())
                 {
-                    var query = context.Database.ExecuteSqlRaw($"ProductoUpdate {producto.IdProducto},'{producto.Nombre}', {producto.PrecioUnitario}, {producto.Stock}, {producto.IdProveedor},{producto.IdDepartamento},'{producto.Descripcion}'");
+                    var query = context.Database.ExecuteSqlRaw($"ProductoUpdate {producto.IdProducto},'{producto.Nombre}', {producto.PrecioUnitario}, {producto.Stock}, {producto.Proveedor.IdProveedor},{producto.Departamento.IdDepartamento},'{producto.Descripcion}'");
                     if (query > 0)
                     {
                         result.Correct = true;
@@ -98,7 +98,7 @@ namespace BL
             return result;
         }
 
-        public static ML.Result GetAll()
+        public static ML.Result GetAll(ML.Producto producto)
         {
             ML.Result result = new ML.Result();
 
@@ -107,7 +107,7 @@ namespace BL
             {
                 using (DL.BantonioProgramacionNcapasContext context = new DL.BantonioProgramacionNcapasContext())
                 {
-                    var query = context.Productos.FromSqlRaw($"ProductoGetAll").ToList();
+                    var query = context.Productos.FromSqlRaw($"ProductoGetAll '{producto.Nombre}',{producto.IdProducto} ").ToList();
 
                     
                     result.Objects = new List<object>();
@@ -115,14 +115,23 @@ namespace BL
                     {
                         foreach (var obj in query)
                         {
-                            ML.Producto producto = new ML.Producto();
+                            producto = new ML.Producto();
 
                             producto.IdProducto = (byte)obj.IdProducto;
                             producto.Nombre = obj.Nombre;
                             producto.PrecioUnitario = obj.PrecioUnitario;
                             producto.Stock = obj.Stock;
-                            producto.IdProveedor = obj.IdProveedor.Value;
-                            producto.IdDepartamento = obj.IdDepartamento.Value;
+
+                            producto.Proveedor = new ML.Proveedor();
+                            producto.Proveedor.IdProveedor = (byte)obj.IdProveedor;
+                            producto.Proveedor.Nombre = obj.NombreProveedor;
+                            //producto.IdProveedor = obj.IdProveedor.Value;
+
+                            producto.Departamento = new ML.Departamento();
+                            producto.Departamento.IdDepartamento = (byte)obj.IdDepartamento;
+                            producto.Departamento.Nombre = obj.NombreDepartamento;
+                            //producto.IdDepartamento = obj.IdDepartamento.Value;
+
                             producto.Descripcion = obj.Descripcion;
                             producto.Imagen = obj.Imagen;
 
@@ -156,26 +165,33 @@ namespace BL
             {
                 using (DL.BantonioProgramacionNcapasContext context = new DL.BantonioProgramacionNcapasContext())
                 {
-                    var query = context.Usuarios.FromSqlRaw($"ProductoGetById {Idproduct}").AsEnumerable().FirstOrDefault();
+                    var query = context.Productos.FromSqlRaw($"ProductoGetById {Idproduct}").AsEnumerable().FirstOrDefault();
 
                     result.Objects = new List<object>();
 
                     if (query != null)
                     {
                         ML.Producto producto = new ML.Producto();
-                        ML.Usuario usuario = new ML.Usuario();
 
-                        //producto.IdProducto = byte.Parse(query.IdProducto);
+                        producto.IdProducto = (byte)query.IdProducto;
                         producto.Nombre = query.Nombre;
-                        //producto.PrecioUnitario = query.PrecioUnitario;
-                        //producto.Stock = query.Stock;
-                        //producto.IdProveedor = query.IdProveedor
+                        producto.PrecioUnitario = query.PrecioUnitario;
+                        producto.Stock = query.Stock;
 
+                        producto.Proveedor = new ML.Proveedor();
+                        producto.Proveedor.IdProveedor = (byte)query.IdProveedor;
+                        producto.Proveedor.Nombre = query.NombreProveedor;
+                        //producto.IdProveedor = obj.IdProveedor.Value;
 
+                        producto.Departamento = new ML.Departamento();
+                        producto.Departamento.IdDepartamento = (byte)query.IdDepartamento;
+                        producto.Departamento.Nombre = query.NombreDepartamento;
+                        //producto.IdDepartamento = obj.IdDepartamento.Value;
 
+                        producto.Descripcion = query.Descripcion;
+                        producto.Imagen = query.Imagen;
 
-
-                        result.Object = usuario;
+                        result.Object = producto;
 
                         result.Correct = true;
                     }
