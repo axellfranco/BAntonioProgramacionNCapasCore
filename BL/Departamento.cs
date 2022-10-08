@@ -21,7 +21,7 @@ namespace BL
 
                     var query = context.Database.ExecuteSqlRaw($"DepartamentoAdd '{departamento.Nombre}',{departamento.Area.IdArea}");
 
-                  
+
 
                     if (query > 0)
                     {
@@ -87,7 +87,7 @@ namespace BL
                 {
 
                     var query = context.Database.ExecuteSqlRaw($"DepartamentoDelete {departamento.IdDepartamento} ");
-                    
+
                     if (query > 0)
                     {
                         result.Correct = true;
@@ -117,7 +117,7 @@ namespace BL
             {
                 using (DL.BantonioProgramacionNcapasContext context = new DL.BantonioProgramacionNcapasContext())
                 {
-                    
+
                     var query = context.Departamentos.FromSqlRaw($"DepartamentoGetAll").ToList();
 
                     result.Objects = new List<object>();
@@ -129,10 +129,10 @@ namespace BL
 
                             ML.Departamento departamento = new ML.Departamento();
 
-                            departamento.IdDepartamento= ((byte)obj.IdDepartamento);
+                            departamento.IdDepartamento = ((byte)obj.IdDepartamento);
                             departamento.Nombre = obj.Nombre;
-                            
-                            
+
+
                             result.Objects.Add(departamento);
                         }
                         result.Correct = true;
@@ -164,28 +164,26 @@ namespace BL
             {
                 using (DL.BantonioProgramacionNcapasContext context = new DL.BantonioProgramacionNcapasContext())
                 {
-                    var query = context.Departamentos.FromSqlRaw($"DepartamentoGetByIdArea {IdDepartamento}").ToList();
+                    var query = context.Departamentos.FromSqlRaw($"DepartamentoGetByIdArea {IdDepartamento}").AsEnumerable().FirstOrDefault();
 
                     if (query != null)
                     {
-                        result.Objects = new List<object>();
-                        foreach (var obj in query)
-                        {
-                            ML.Departamento departamento = new ML.Departamento();
 
-                            departamento.IdDepartamento = (byte)obj.IdDepartamento;
-                            departamento.Nombre = obj.Nombre;
+                        ML.Departamento departamento = new ML.Departamento();
 
-                            departamento.Area = new ML.Area();
-                            departamento.Area.IdArea = (byte)obj.IdArea;
+                        departamento.IdDepartamento = (byte)query.IdDepartamento;
+                        departamento.Nombre = query.Nombre;
+
+                        departamento.Area = new ML.Area();
+                        departamento.Area.IdArea = (byte)query.IdArea;
 
 
+                        result.Object = departamento;
 
-                            result.Objects.Add(departamento);
 
-                            result.Correct = true;
+                        result.Correct = true;
 
-                        }
+
 
                     }
                     else
@@ -215,7 +213,7 @@ namespace BL
             {
                 using (DL.BantonioProgramacionNcapasContext context = new DL.BantonioProgramacionNcapasContext())
                 {
-                    
+
                     var query = context.Departamentos.FromSqlRaw($"DepartamentoGetByIdArea {IdDepartamento}").ToList();
 
                     if (query != null)
@@ -224,15 +222,16 @@ namespace BL
                         foreach (var obj in query)
                         {
                             ML.Departamento departamento = new ML.Departamento();
+                            departamento.Area = new ML.Area();
 
-                            departamento.IdDepartamento = ((byte)obj.IdDepartamento);
+
+                            departamento.IdDepartamento = (byte)obj.IdDepartamento;
                             departamento.Nombre = obj.Nombre;
 
-                            departamento.Area = new ML.Area();
-                            departamento.Area.IdArea =((byte)obj.IdArea);
+                            
+                            departamento.Area.IdArea = ((byte)obj.IdArea);
 
                             result.Objects.Add(departamento);
-
 
 
                         }

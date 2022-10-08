@@ -16,12 +16,12 @@ namespace ML
 
         public int Stock { get; set; }
 
-        public ML.Proveedor Proveedor { get; set; }
+        public ML.Proveedor? Proveedor { get; set; }
         public List<object>? Proveedores { get; set; }
         //public int IdProveedor { get; set; }
 
-        public ML.Departamento Departamento { get; set; }
-
+        public ML.Departamento? Departamento { get; set; }
+        public List<object>? Departamentos { get; set; }
         //public int IdDepartamento { get; set; }
 
         public string? Descripcion { get; set; }
@@ -31,5 +31,7 @@ namespace ML
         public List<object>? ProductoList { get; set; }
 
         
+
+
     }
 }

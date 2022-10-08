@@ -49,7 +49,7 @@ namespace BL
             {
                 using (DL.BantonioProgramacionNcapasContext context = new DL.BantonioProgramacionNcapasContext())
                 {
-                    var query = context.Database.ExecuteSqlRaw($"UsuarioUpdate {usuario.IdUsuario}'{usuario.UserName}','{usuario.Nombre}', '{usuario.ApellidoPaterno}', '{usuario.ApellidoMaterno}', '{usuario.Email}','{usuario.Password}', '{usuario.FechaNacimiento}','{usuario.Sexo}','{usuario.Telefono}', '{usuario.Celuar}','{usuario.Curp}',{usuario.Rol.IdRol},'{usuario.Imagen}',{usuario.Estatus},'{usuario.Direccion.Calle}','{usuario.Direccion.NumeroInterior}','{usuario.Direccion.NumeroExterior}',{usuario.Direccion.Colonia.IdColonia}");
+                    var query = context.Database.ExecuteSqlRaw($"UsuarioUpdate {usuario.IdUsuario},'{usuario.UserName}','{usuario.Nombre}','{usuario.ApellidoPaterno}', '{usuario.ApellidoMaterno}', '{usuario.Email}','{usuario.Password}', '{usuario.FechaNacimiento}','{usuario.Sexo}','{usuario.Telefono}', '{usuario.Celuar}','{usuario.Curp}',{usuario.Rol.IdRol},'{usuario.Imagen}',{usuario.Estatus},'{usuario.Direccion.Calle}','{usuario.Direccion.NumeroInterior}','{usuario.Direccion.NumeroExterior}',{usuario.Direccion.Colonia.IdColonia}");
                     if (query > 0)
                     {
                         result.Correct = true;
@@ -209,7 +209,7 @@ namespace BL
                         usuario.ApellidoMaterno = query.ApellidoMaterno;
                         usuario.Email = query.Email;
                         usuario.Password = query.Password;
-                        usuario.FechaNacimiento = query.FechaNacimiento.ToString();
+                        usuario.FechaNacimiento = Convert.ToDateTime(query.FechaNacimiento.ToString()).ToString("dd-MM-yyyy");
                         usuario.Sexo = query.Sexo;
                         usuario.Telefono = query.Telefono;
                         usuario.Celuar = query.Celular;
@@ -269,7 +269,7 @@ namespace BL
 
         public static ML.Result ConvertirExceltoDataTable(string connString)
         {
-            ML.Result result= new ML.Result();
+            ML.Result result = new ML.Result();
 
             try
             {
@@ -277,7 +277,7 @@ namespace BL
                 {
                     string query = "SELECT * FROM [Sheet1$]";
 
-                    using (OleDbCommand cmd= new OleDbCommand())
+                    using (OleDbCommand cmd = new OleDbCommand())
                     {
                         cmd.CommandText = query;
                         cmd.Connection = context;
@@ -290,7 +290,7 @@ namespace BL
                         da.Fill(tableusuario);
 
 
-                        if(tableusuario.Rows.Count > 0)
+                        if (tableusuario.Rows.Count > 0)
                         {
                             result.Objects = new List<object>();
 
@@ -298,7 +298,7 @@ namespace BL
                             {
                                 ML.Usuario usuario = new ML.Usuario();
 
-                               
+
                                 usuario.UserName = row[0].ToString();
                                 usuario.Nombre = row[1].ToString();
                                 usuario.ApellidoPaterno = row[2].ToString();
@@ -310,7 +310,7 @@ namespace BL
                                 usuario.Telefono = row[8].ToString();
                                 usuario.Celuar = row[9].ToString();
                                 usuario.Curp = row[10].ToString();
-                                
+
                                 usuario.Imagen = null;
                                 usuario.Estatus = true;
 
@@ -319,14 +319,14 @@ namespace BL
                                 //usuario.Rol.Nombre = row[12].ToString();
 
                                 usuario.Direccion = new ML.Direccion();
-                               
+
                                 usuario.Direccion.Calle = row[12].ToString();
                                 usuario.Direccion.NumeroInterior = row[13].ToString();
                                 usuario.Direccion.NumeroExterior = row[14].ToString();
 
                                 usuario.Direccion.Colonia = new ML.Colonia();
                                 usuario.Direccion.Colonia.IdColonia = byte.Parse(row[15].ToString());
-                                
+
 
                                 result.Objects.Add(usuario);
                             }
@@ -372,7 +372,7 @@ namespace BL
                 {
                     ML.ErrorExcel error = new ML.ErrorExcel();
                     error.IdRegistro = i++;
-                    
+
 
                     usuario.UserName = (usuario.UserName == "") ? error.Mensaje += "Ingresa el Usuario: " : usuario.UserName;
                     usuario.Nombre = (usuario.Nombre == "") ? error.Mensaje += "Ingresa el Nombre: " : usuario.Nombre;
@@ -390,8 +390,8 @@ namespace BL
 
                     usuario.Rol = new ML.Rol();
                     //usuario.Rol.IdRol = (usuario.Rol.IdRol == 0) ? error.Mensaje += "Ingresa el Rol" : usuario.Rol.IdRol;
-                    
-                    
+
+
                     usuario.Direccion = new ML.Direccion();
                     //usuario.Direccion.Calle = (usuario.Direccion.IdDireccion == 0) ? error.Mensaje += "Ingresa el Id de Direccion" :int.Parse(usuario.Direccion.IdDireccion);
                     usuario.Direccion.Calle = (usuario.Direccion.Calle == "") ? error.Mensaje += "Ingresa la Calle" : usuario.Direccion.Calle;
@@ -413,7 +413,53 @@ namespace BL
 
                 throw;
             }
-            return result; 
+            return result;
         }
+
+        //Consumir en MVC
+
+        public static ML.Result GetAllByAPI()
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("https://jsonplaceholder.typicode.com/");
+
+                    var responseTask = client.GetAsync("photos");
+                    responseTask.Wait();
+
+                    var resultServicio = responseTask.Result;
+
+                    if (resultServicio.IsSuccessStatusCode)
+                    {
+                        //var readTask = resultServicio.Content.ReadAsAsync<List<ML.Photo>>();
+                        //readTask.Wait();
+
+                        //foreach (var resultItem in readTask.Result)
+                        //{
+                            //ML.SubCategoria resultItemList = Newtonsoft.Json.JsonConvert.DeserializeObject<ML.SubCategoria>(resultItem.ToString());
+                            //result.Objects.Add(resultItem);
+                        //}
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+            }
+
+            return result;
+        }
+
+        //Consumir en MVC
+
     }
+
+
 }

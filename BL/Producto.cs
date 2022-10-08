@@ -46,7 +46,7 @@ namespace BL
             {
                 using (DL.BantonioProgramacionNcapasContext context = new DL.BantonioProgramacionNcapasContext())
                 {
-                    var query = context.Database.ExecuteSqlRaw($"ProductoUpdate {producto.IdProducto},'{producto.Nombre}', {producto.PrecioUnitario}, {producto.Stock}, {producto.Proveedor.IdProveedor},{producto.Departamento.IdDepartamento},'{producto.Descripcion}'");
+                    var query = context.Database.ExecuteSqlRaw($"ProductoUpdate {producto.IdProducto},'{producto.Nombre}', {producto.PrecioUnitario}, {producto.Stock}, {producto.Proveedor.IdProveedor},{producto.Departamento.IdDepartamento},'{producto.Descripcion}','{producto.Imagen}'");
                     if (query > 0)
                     {
                         result.Correct = true;

@@ -71,81 +71,76 @@
 
 @foreach (ML.Producto producto in Model.ProductoList)
 {
-    <div class="row">
+    <div class="row align-items-start">
+        <div class="col-md-3">
 
-       @* <div class="card col-mt-3" style="width: 18rem;">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <img src=@producto.Imagen class="card-img-top" alt="...">
-                </div>
-                <div class="col-md-3">
-                    <div class="card-body">
-                        <h5 class="card-title"   id="pNombre">Nombre: @producto.Nombre</h5>
-                        <p class="card-text" id="pDescripcion">Descripcion: @producto.Descripcion</p>
-                        <p class="card-text" id="pPrecio" >Precio: @producto.PrecioUnitario</p>
-                        <a href="#" class="btn btn-primary">Venta</a>
-                    </div>
-                </div>
-            </div>
-        </div>*@
-        
-        <div class="col mt-3 pt-3">
-            <div class="card text-white bg-dark border-success  mb-3 border-4 " style="width: 18rem;">
-              @*  <img src="~/Images/Historia.jpg" class="card-img-top" style=" height:50%; width:100%;">*@
-               <img src="data:image/*;base64,@producto.Imagen" style="width:100%; height:50%" />
-                <div class="card-body ">
+            
+
+            <div class="card text-white bg-dark border-success  mb-3 border-4" style="width: 18rem;">
+               
+                <img src="data:image/*;base64,@producto.Imagen" style="width:100%; height:50%" />
+                
+                <div class="card-body">
                     <h5 class="card-title card-header text-center bg-secondary" id="pNombre">@producto.Nombre</h5>
                     <p class="card-text" id="pCreditos">Precio: @producto.PrecioUnitario</p>
                     <p class="card-text" id="pCosto">Descripción: @producto.Descripcion</p>
-                    
-                  @*  <p class="card-text" style="display: none;" id="pIdMateria"> @materia.IdMateria</p>*@
                     <a href="@Url.Action("CartPost", "VentaMateria", null)" class="btn btn-success">Añadir <i class="bi bi-cart3" style="color: khaki"></i> </a>
-
-                   @* <button class="btn btn-success" onclick="CrearObjeto()" >Añadir <i class="bi bi-cart3" style="color: khaki"></i></button>      *@             
-                </div>
-            </div>
-        </div>
-
-        @*<div class="col">
-            <div class="card">
-                <img src="@producto.Imagen" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                 </div>
             </div>
 
-        </div>*@
-        </div>
-        }
+           
 
-        @section Scripts
+        </div>
+    </div>
+
+
+
+    @*<div class="row">
+        <div class="card col mt-3 pt-3" style="max-width: 540px;">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="data:image/*;base64,@producto.Imagen" style="width:100%; height:50%" class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title card-header text-center bg-secondary" id="pNombre">@producto.Nombre</h5>
+                         <p class="card-text" id="pCreditos">Precio: @producto.PrecioUnitario</p>
+                    <p class="card-text" id="pCosto">Descripción: @producto.Descripcion</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+}
+
+
+@section Scripts
     {
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 
-    <script type="text/javascript">
-            $(document).ready(function () {
-            $("#ddlArea").change(function () {
-                $("#ddlDepartamento").empty();
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("GetDepartamento")', /*Configurando*/
-                    dataType: 'json',
-                    data: { IdArea: $("#ddlArea").val() },
-                    success: function (departamentos) {
-                        $("#ddlDepartamento").append('<option value="0">'+ 'Seleccione un Departamento' + '</option>');
-                        $.each(departamentos, function (i, departamentos) {
-                            $("#ddlDepartamento").append('<option value="'
-                                                       + departamentos.IdDepartamento + '">'
-                                                       + departamentos.nombre + '</option>');
-                        });
-                    },
-                    error: function (ex) {
-                        alert('Failed.' + ex);
-                    }
-                });
+<script type="text/javascript">
+        $(document).ready(function () {
+        $("#ddlArea").change(function () {
+            $("#ddlDepartamento").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetDepartamento")', /*Configurando*/
+                dataType: 'json',
+                data: { IdArea: $("#ddlArea").val() },
+                success: function (departamentos) {
+                    $("#ddlDepartamento").append('<option value="0">'+ 'Seleccione un Departamento' + '</option>');
+                    $.each(departamentos, function (i, departamentos) {
+                        $("#ddlDepartamento").append('<option value="'
+                                                   + departamentos.IdDepartamento + '">'
+                                                   + departamentos.nombre + '</option>');
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed.' + ex);
+                }
             });
         });
-    </script>
+    });
+</script>
     }
